@@ -26,6 +26,7 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     private Button openImageButton;
+    private Button overlayBitmapButton;
     private TouchImageView imageView;
     private final int PICK_FILE_RESULT_CODE = 1000;
     public static String TAG = "MainActivity";
@@ -47,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        openImageButton = (Button)findViewById(R.id.test_button);
-        openImageButton.setOnClickListener(new View.OnClickListener() {
+        overlayBitmapButton = (Button)findViewById(R.id.test_button_overlay);
+        overlayBitmapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                test();
+                testOverlay();
             }
         });
 
@@ -118,13 +119,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Bitmap createTopBitmap() {
-        Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-        Bitmap tempBitmap = Bitmap.createBitmap(500, 500, conf); // this creates a MUTABLE bitmap
+        Bitmap tempBitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888); // this creates a MUTABLE bitmap
         Canvas tempCanvas = new Canvas(tempBitmap);
         tempCanvas.drawBitmap(tempBitmap, 0, 0, null);
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
-        tempCanvas.drawRoundRect(new RectF(100, 100, 200, 200), 2, 2, new Paint());
+        tempCanvas.drawRect(new RectF(100, 100, 200, 200), paint);
         return tempBitmap;
     }
 
@@ -136,9 +136,10 @@ public class MainActivity extends AppCompatActivity {
         return bmOverlay;
     }
 
-    private void test() {
+    private void testOverlay() {
         Bitmap bitmap = overlay(((BitmapDrawable)imageView.getDrawable()).getBitmap(),
                 createTopBitmap());
         imageView.setImageBitmap(bitmap);
     }
+
 }

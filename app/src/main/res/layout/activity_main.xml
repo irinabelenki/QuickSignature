@@ -10,18 +10,66 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.irinabelenki.quicksignature.MainActivity">
 
-    <Button
-        android:id="@+id/open_image_button"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Open Image" />
+        android:orientation="horizontal"
+        android:padding="15dp">
 
-    <Button
-        android:id="@+id/test_button"
+        <Button
+            android:id="@+id/open_image_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Open Image" />
+
+        <Button
+            android:id="@+id/test_button_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Overlay bitmap" />
+
+    </LinearLayout>
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/GridLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="Draw Test" />
+        android:columnCount="3"
+        android:rowCount="3">
+
+        <Button
+            android:id="@+id/up"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:text="Up" />
+
+        <Button
+            android:id="@+id/down"
+            android:layout_column="1"
+            android:layout_row="2"
+            android:text="Down" />
+
+        <Button
+            android:id="@+id/left"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:text="Left" />
+
+        <Button
+            android:id="@+id/right"
+            android:layout_column="2"
+            android:layout_row="1"
+            android:text="Right" />
+
+        <Button
+            android:id="@+id/load"
+            android:layout_column="1"
+            android:layout_row="1"
+            android:text="Load" />
+
+    </GridLayout>
 
     <com.irinabelenki.quicksignature.TouchImageView
         android:id="@+id/image_view"

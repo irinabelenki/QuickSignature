@@ -5,8 +5,13 @@ package com.irinabelenki.quicksignature;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -184,7 +189,7 @@ public class TouchImageView extends ImageView {
         //
         // Rescales image on rotation
         //
-        if (oldMeasuredHeight == viewWidth && oldMeasuredHeight == viewHeight
+        if (oldMeasuredWidth == viewWidth && oldMeasuredHeight == viewHeight
                 || viewWidth == 0 || viewHeight == 0)
             return;
         oldMeasuredHeight = viewHeight;
@@ -213,6 +218,80 @@ public class TouchImageView extends ImageView {
             setImageMatrix(matrix);
         }
         fixTrans();
+    }
+
+    private int bitmapLeft = -1;
+    private int bitmapTop = -1;
+    private int bitmapRight = -1;
+    private int bitmapBottom = -1;
+    Bitmap overlayBitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888); // this creates a MUTABLE bitmap
+    private int SHIFT = 50;
+    Paint bitmapPaint = new Paint();
+
+    public void setBitmapCoordinates(int left, int top, int right, int bottom) {
+        this.bitmapLeft = left;
+        this.bitmapTop = top;
+        this.bitmapRight = right;
+        this.bitmapBottom = bottom;
+    }
+
+    public void bitmapUp() {
+        if (inLimits(bitmapLeft, bitmapTop - SHIFT, bitmapRight, bitmapBottom - SHIFT)) {
+            bitmapTop -= SHIFT;
+            bitmapBottom -= SHIFT;
+        }
+    }
+
+    public void bitmapDown() {
+        if (inLimits(bitmapLeft, bitmapTop + SHIFT, bitmapRight, bitmapBottom + SHIFT)) {
+            bitmapTop += SHIFT;
+            bitmapBottom += SHIFT;
+        }
+    }
+
+    public void bitmapLeft() {
+        if (inLimits(bitmapLeft - SHIFT, bitmapTop, bitmapRight - SHIFT, bitmapBottom)) {
+            bitmapLeft -= SHIFT;
+            bitmapRight -= SHIFT;
+        }
+    }
+
+    public void bitmapRight() {
+        if (inLimits(bitmapLeft + SHIFT, bitmapTop, bitmapRight + SHIFT, bitmapBottom)) {
+            bitmapLeft += SHIFT;
+            bitmapRight += SHIFT;
+        }
+    }
+
+    private boolean bitmapInit() {
+        return bitmapLeft > -1 && bitmapTop > -1 && bitmapRight > -1 && bitmapBottom > -1;
+    }
+
+    private boolean inLimits(int left, int top, int right, int bottom) {
+        //int[] location = new int[2];
+        //getLocationOnScreen(location);
+        //int x = location[0];
+        //int y = location[1];
+        if (left >= 0 && left <= getWidth() &&
+                top >= 0 && top <= getHeight() &&
+                right >= 0 && right <= getWidth() &&
+                bottom >= 0 && bottom <= getHeight() &&
+                right - left <= getWidth() &&
+                bottom - top <= getHeight()
+                ) {
+            return true;
+        }
+        return false;
+    }
+
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (bitmapInit()) {
+            canvas.drawBitmap(overlayBitmap, 0, 0, null);
+            bitmapPaint.setColor(Color.RED);
+            canvas.drawRect(new RectF(bitmapLeft, bitmapTop, bitmapRight, bitmapBottom), bitmapPaint);
+        }
     }
 }
 

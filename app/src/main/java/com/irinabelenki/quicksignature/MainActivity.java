@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button openImageButton;
     private Button overlayBitmapButton;
+    private Button loadButton, upButton, downButton, leftButton, rightButton;
+
     private TouchImageView imageView;
     private final int PICK_FILE_RESULT_CODE = 1000;
     public static String TAG = "MainActivity";
@@ -53,6 +55,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 testOverlay();
+            }
+        });
+
+        loadButton = (Button)findViewById(R.id.load_button);
+        loadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.setBitmapCoordinates(100, 100, 200, 200);
+                imageView.invalidate();
+            }
+        });
+        upButton = (Button)findViewById(R.id.up_button);
+        upButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.bitmapUp();
+                imageView.invalidate();
+            }
+        });
+        downButton = (Button)findViewById(R.id.down_button);
+        downButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.bitmapDown();
+                imageView.invalidate();
+            }
+        });
+        leftButton = (Button)findViewById(R.id.left_button);
+        leftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.bitmapLeft();
+                imageView.invalidate();
+            }
+        });
+        rightButton = (Button)findViewById(R.id.right_button);
+        rightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.bitmapRight();
+                imageView.invalidate();
             }
         });
 
@@ -118,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-    private Bitmap createTopBitmap() {
+    public static Bitmap createTopBitmap() {
         Bitmap tempBitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888); // this creates a MUTABLE bitmap
         Canvas tempCanvas = new Canvas(tempBitmap);
         tempCanvas.drawBitmap(tempBitmap, 0, 0, null);

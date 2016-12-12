@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
@@ -118,9 +119,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Bitmap createTopBitmap() {
         Bitmap.Config conf = Bitmap.Config.ARGB_8888; // see other conf types
-        Bitmap tempBitmap = Bitmap.createBitmap(100, 100, conf); // this creates a MUTABLE bitmap
+        Bitmap tempBitmap = Bitmap.createBitmap(500, 500, conf); // this creates a MUTABLE bitmap
         Canvas tempCanvas = new Canvas(tempBitmap);
         tempCanvas.drawBitmap(tempBitmap, 0, 0, null);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
         tempCanvas.drawRoundRect(new RectF(100, 100, 200, 200), 2, 2, new Paint());
         return tempBitmap;
     }

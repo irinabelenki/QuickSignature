@@ -220,51 +220,51 @@ public class TouchImageView extends ImageView {
         fixTrans();
     }
 
-    private int bitmapLeft = -1;
-    private int bitmapTop = -1;
-    private int bitmapRight = -1;
-    private int bitmapBottom = -1;
-    Bitmap overlayBitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.ARGB_8888); // this creates a MUTABLE bitmap
+    private int rectLeft = -1;
+    private int rectTop = -1;
+    private int rectRight = -1;
+    private int rectBottom = -1;
     private int SHIFT = 50;
-    Paint bitmapPaint = new Paint();
+    Paint paint = new Paint();
 
-    public void setBitmapCoordinates(int left, int top, int right, int bottom) {
-        this.bitmapLeft = left;
-        this.bitmapTop = top;
-        this.bitmapRight = right;
-        this.bitmapBottom = bottom;
+    public void setRectCoordinates(int left, int top, int right, int bottom) {
+        this.rectLeft = left;
+        this.rectTop = top;
+        this.rectRight = right;
+        this.rectBottom = bottom;
     }
 
-    public void bitmapUp() {
-        if (inLimits(bitmapLeft, bitmapTop - SHIFT, bitmapRight, bitmapBottom - SHIFT)) {
-            bitmapTop -= SHIFT;
-            bitmapBottom -= SHIFT;
+    public void rectUp() {
+        if (inLimits(rectLeft, rectTop - SHIFT, rectRight, rectBottom - SHIFT)) {
+            rectTop -= SHIFT;
+            rectBottom -= SHIFT;
         }
     }
 
-    public void bitmapDown() {
-        if (inLimits(bitmapLeft, bitmapTop + SHIFT, bitmapRight, bitmapBottom + SHIFT)) {
-            bitmapTop += SHIFT;
-            bitmapBottom += SHIFT;
+    public void rectDown() {
+        if (inLimits(rectLeft, rectTop + SHIFT, rectRight, rectBottom + SHIFT)) {
+            rectTop += SHIFT;
+            rectBottom += SHIFT;
         }
     }
 
-    public void bitmapLeft() {
-        if (inLimits(bitmapLeft - SHIFT, bitmapTop, bitmapRight - SHIFT, bitmapBottom)) {
-            bitmapLeft -= SHIFT;
-            bitmapRight -= SHIFT;
+    public void rectLeft() {
+        if (inLimits(rectLeft - SHIFT, rectTop, rectRight - SHIFT, rectBottom)) {
+            rectLeft -= SHIFT;
+            rectRight -= SHIFT;
         }
     }
 
-    public void bitmapRight() {
-        if (inLimits(bitmapLeft + SHIFT, bitmapTop, bitmapRight + SHIFT, bitmapBottom)) {
-            bitmapLeft += SHIFT;
-            bitmapRight += SHIFT;
+    public void rectRight() {
+        if (inLimits(rectLeft + SHIFT, rectTop, rectRight + SHIFT, rectBottom)) {
+            rectLeft += SHIFT;
+            rectRight += SHIFT;
         }
     }
 
-    private boolean bitmapInit() {
-        return bitmapLeft > -1 && bitmapTop > -1 && bitmapRight > -1 && bitmapBottom > -1;
+    private boolean rectInit() {
+        return rectLeft > -1 && rectTop > -1 &&
+               rectRight > -1 && rectBottom > -1;
     }
 
     private boolean inLimits(int left, int top, int right, int bottom) {
@@ -287,10 +287,9 @@ public class TouchImageView extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (bitmapInit()) {
-            canvas.drawBitmap(overlayBitmap, 0, 0, null);
-            bitmapPaint.setColor(Color.RED);
-            canvas.drawRect(new RectF(bitmapLeft, bitmapTop, bitmapRight, bitmapBottom), bitmapPaint);
+        if (rectInit()) {
+            paint.setColor(Color.RED);
+            canvas.drawRect(new RectF(rectLeft, rectTop, rectRight, rectBottom), paint);
         }
     }
 }

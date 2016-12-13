@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         loadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.setBitmapCoordinates(100, 100, 200, 200);
+                imageView.setRectCoordinates(100, 100, 200, 200);
                 imageView.invalidate();
             }
         });
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.bitmapUp();
+                imageView.rectUp();
                 imageView.invalidate();
             }
         });
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.bitmapDown();
+                imageView.rectDown();
                 imageView.invalidate();
             }
         });
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.bitmapLeft();
+                imageView.rectLeft();
                 imageView.invalidate();
             }
         });
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageView.bitmapRight();
+                imageView.rectRight();
                 imageView.invalidate();
             }
         });

@@ -189,7 +189,7 @@ public class TouchImageView extends ImageView {
         //
         // Rescales image on rotation
         //
-        if (oldMeasuredWidth == viewWidth && oldMeasuredHeight == viewHeight
+        if (oldMeasuredHeight == viewWidth && oldMeasuredHeight == viewHeight
                 || viewWidth == 0 || viewHeight == 0)
             return;
         oldMeasuredHeight = viewHeight;

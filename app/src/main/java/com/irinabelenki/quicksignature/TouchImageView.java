@@ -5,7 +5,6 @@ package com.irinabelenki.quicksignature;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -225,19 +224,67 @@ public class TouchImageView extends ImageView {
     private int rectRight = -1;
     private int rectBottom = -1;
     private int SHIFT = 50;
+    private int RECT_WIDTH = 400;
+    private int RECT_HEIGHT = 200;
     Paint paint = new Paint();
+    private float[] f = new float[9];
 
-    public void setRectCoordinates(int left, int top, int right, int bottom) {
-        this.rectLeft = left;
-        this.rectTop = top;
-        this.rectRight = right;
-        this.rectBottom = bottom;
+    public void setRectangle() {
+        int[] bitmapPosition = new int[4];
+        getBitmapPositionInsideImageView(bitmapPosition);
+        Log.i(TAG, "bitmap position: " + bitmapPosition[0] +", "+ bitmapPosition[1]+", "+ bitmapPosition[2]+", "+ bitmapPosition[3]);
+
+        rectLeft = 0;
+        rectTop = 0;
+        rectRight = rectLeft + RECT_WIDTH;
+        rectBottom = rectTop + RECT_HEIGHT;
+        Log.i(TAG, "rect positions: " + rectLeft +", "+ rectTop+", "+ rectRight+", "+ rectBottom);
+        paint.setColor(Color.RED);
+        invalidate();
+    }
+
+    public int[] getBitmapPositionInsideImageView(int[] ret) {
+        if (getDrawable() == null) {
+            return ret;
+        }
+        float[] f = new float[9];
+        getImageMatrix().getValues(f);
+
+        // Extract the scale values using the constants (if aspect ratio maintained, scaleX == scaleY)
+        final float scaleX = f[Matrix.MSCALE_X];
+        final float scaleY = f[Matrix.MSCALE_Y];
+
+        // Get the drawable (could also get the bitmap behind the drawable and getWidth/getHeight)
+        final Drawable d = getDrawable();
+        final int origW = d.getIntrinsicWidth();
+        final int origH = d.getIntrinsicHeight();
+
+        // Calculate the actual dimensions
+        final int actW = Math.round(origW * scaleX);
+        final int actH = Math.round(origH * scaleY);
+
+        ret[2] = actW;
+        ret[3] = actH;
+
+        // Get image position
+        // We assume that the image is centered into ImageView
+        int imgViewW = getWidth();
+        int imgViewH = getHeight();
+
+        int top = (int) (imgViewH - actH)/2;
+        int left = (int) (imgViewW - actW)/2;
+
+        ret[0] = left;
+        ret[1] = top;
+
+        return ret;
     }
 
     public void rectUp() {
         if (inLimits(rectLeft, rectTop - SHIFT, rectRight, rectBottom - SHIFT)) {
             rectTop -= SHIFT;
             rectBottom -= SHIFT;
+            invalidate();
         }
     }
 
@@ -245,6 +292,7 @@ public class TouchImageView extends ImageView {
         if (inLimits(rectLeft, rectTop + SHIFT, rectRight, rectBottom + SHIFT)) {
             rectTop += SHIFT;
             rectBottom += SHIFT;
+            invalidate();
         }
     }
 
@@ -252,6 +300,7 @@ public class TouchImageView extends ImageView {
         if (inLimits(rectLeft - SHIFT, rectTop, rectRight - SHIFT, rectBottom)) {
             rectLeft -= SHIFT;
             rectRight -= SHIFT;
+            invalidate();
         }
     }
 
@@ -259,6 +308,7 @@ public class TouchImageView extends ImageView {
         if (inLimits(rectLeft + SHIFT, rectTop, rectRight + SHIFT, rectBottom)) {
             rectLeft += SHIFT;
             rectRight += SHIFT;
+            invalidate();
         }
     }
 
@@ -288,7 +338,16 @@ public class TouchImageView extends ImageView {
         super.onDraw(canvas);
 
         if (rectInit()) {
-            paint.setColor(Color.RED);
+            getImageMatrix().getValues(f);
+            float scaleX = f[Matrix.MSCALE_X];
+            float scaleY = f[Matrix.MSCALE_Y];
+            int origW = RECT_WIDTH;
+            int origH = RECT_HEIGHT;
+
+            int actW = Math.round(origW * scaleX);
+            int actH = Math.round(origH * scaleY);
+            rectRight = rectLeft + actW;
+            rectBottom = rectTop + actH;
             canvas.drawRect(new RectF(rectLeft, rectTop, rectRight, rectBottom), paint);
         }
     }
